@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Kategori;
 
 class KategoriController extends Controller
 {
@@ -14,7 +15,8 @@ class KategoriController extends Controller
     public function index()
     {
         $title = "Kategori";
-        return view('kategori.index', compact('title'));
+        $kategori = Kategori::orderBy('nama_kategori', 'ASC')->get();
+        return view('kategori.index', compact('title','kategori'));
     }
 
     /**
@@ -35,12 +37,26 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validasi input form
+        $this->validate($request, [
+            'name' => 'required|string'
+        ]);
+
+        // insert ke db menggunakan eloquent 
+        // $kategori = Kategori::create([
+        //     'nama_kategori' => $request->name
+        // ]);
+
+        $kategori = Kategori::firstOrCreate([
+            'nama_kategori' => $request->name
+        ]);
+
+        return redirect()->route('kategori.index')->with(['success' => 'Berhasil menambahkan kategori!']);
     }
 
     /**
      * Display the specified resource.
-     *
+     
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -80,6 +96,23 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // cek data ada atau tidak
+        // $kategori = Kategori::where('id', '=', $id)->first();
+
+        // cek data ada atau tidak
+        // if ($kategori) {
+        //     $kategori->delete();
+        //     return redirect()->route('kategori.index')->with(['success' => 'Kategori berhasil dihapus!']);
+        // }else{
+        //     return redirect()->route('kategori.index');
+        // }
+        try {
+            $kategori = Kategori::findOrFail($id);
+            $kategori->delete();
+            return redirect()->route('kategori.index')->with(['success' => 'Kategori berhasil dihapus!']);
+        } catch (\Throwable $th) {
+            dd($th->getErrorMessage());
+        }
+        
     }
 }

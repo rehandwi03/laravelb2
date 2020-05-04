@@ -1,6 +1,6 @@
 @extends('template.master')
 @section('dhead')
-<h1 class="m-0 text-dark">Tambah Produk</h1>
+<h1 class="m-0 text-dark">Ubah Produk</h1>
 @endsection
 @section('content')
 <section class="content">
@@ -9,16 +9,17 @@
             <div class="col-md">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Tambah Produk</h3>
+                        <h3 class="card-title">Ubah Produk</h3>
                     </div>
-                    <form action="{{ route('produk.store') }}" method="POST" role="form">
+                    <form action="{{ route('produk.update', $produk->id) }}" method="POST" role="form">
                         @csrf
+                        @method('PUT')
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="nama_produk">Nama Produk</label>
                                 <input type="text" name="nama_produk"
                                     class="form-control {{ $errors->has('nama_produk') ? 'is-invalid':'' }}"
-                                    id="nama_produk">
+                                    id="nama_produk" value="{{ $produk->nama_produk }}">
                                 <div class="invalid-feedback">
                                     Masukan nama kategori.
                                 </div>
@@ -37,7 +38,7 @@
                                 <label for="harga_produk">Harga Produk</label>
                                 <input type="numeric" name="harga_produk"
                                     class="form-control {{ $errors->has('harga_produk') ? 'is-invalid':'' }}"
-                                    id="harga_produk">
+                                    id="harga_produk" value="{{ $produk->harga_produk }}">
                                 <div class="invalid-feedback">
                                     Masukan harga produk.
                                 </div>
@@ -45,7 +46,8 @@
                             <div class="form group">
                                 <label for="qty">Qty</label>
                                 <input type="numeric" name="qty"
-                                    class="form-control {{ $errors->has('qty') ? 'is-invalid':'' }}" id="qty">
+                                    class="form-control {{ $errors->has('qty') ? 'is-invalid':'' }}" id="qty"
+                                    value="{{ $produk->qty }}">
                                 <div class="invalid-feedback">
                                     Masukan quantity.
                                 </div>
